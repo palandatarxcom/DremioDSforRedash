@@ -32,9 +32,9 @@
 
 export REDASH_BASE_PATH=/opt/redash
 apt-get install -y alien unixodbc unixodbc-dev
-wget https://download.dremio.com/odbc-driver/1.3.19.1052/dremio-odbc-1.3.19.1052-1.x86_64.rpm
-alien -i --scripts dremio-odbc-1.3.19.1052-1.x86_64.rpm
-rm -f dremio-odbc-1.3.19.1052-1.x86_64.rpm
+wget http://package.mapr.com/tools/MapR-ODBC/MapR_Drill/MapRDrill_odbc_v1.3.22.1055/maprdrill-1.3.22.1055-1.x86_64.rpm
+alien -i --scripts maprdrill-1.3.22.1055-1.x86_64.rpm
+rm -f maprdrill-1.3.22.1055-1.x86_64.rpm
 pip install pyodbc pandas
 wget -O $REDASH_BASE_PATH/current/redash/query_runner/dremio_odbc.py "https://raw.githubusercontent.com/Dezota/DremioDSforRedash/master/dremio_odbc.py"
 wget -O $REDASH_BASE_PATH/current/client/dist/images/db-logos/dremio_odbc.png "https://raw.githubusercontent.com/Dezota/DremioDSforRedash/master/dremio_odbc.png"

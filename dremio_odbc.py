@@ -28,7 +28,7 @@
 #   OTHER DEALINGS IN THE SOFTWARE.
 #
 #   For more information, please refer to <http://unlicense.org/>
- 
+
 import json
 import logging
 import sys
@@ -43,7 +43,7 @@ def FormatDremioTableSchema( dts ):
    dtsarr[0] = '"%s"'%dtsarr[0]
    dtsdelim = "."
    return dtsdelim.join(dtsarr)
-   
+
 class DremioJSONEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, uuid.UUID):
@@ -74,38 +74,11 @@ class DremioODBC(BaseSQLQueryRunner):
         return {
             "type": "object",
             "properties": {
-                "user": {
+                "connection": {
                     "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "server": {
-                    "type": "string",
-                    "default": "127.0.0.1"
-                },
-                "port": {
-                    "type": "number",
-                    "default": 31010
-                },
-                "charset": {
-                    "type": "string",
-                    "default": "UTF-8",
-                    "title": "Character Set"
-                },
-                "db": {
-                    "type": "string",
-                    "title": "Schema Name",
-                    "default": ""
-                },
-                "driver": {
-                    "type": "string",
-                    "title": "Driver Identifier",
-                    "default": "{Dremio ODBC Driver 64-bit}"
                 }
             },
-            "required": ["server","user","password"],
-            "secret": ["password"]
+            "required": ["connection"]
         }
 
     @classmethod
@@ -141,10 +114,7 @@ class DremioODBC(BaseSQLQueryRunner):
         results = json.loads(results)
 
         for row in results['rows']:
-            if row['table_schema'] != self.configuration['db']:
-                table_name = u'{}.{}'.format(FormatDremioTableSchema(row['table_schema']), row['table_name'])
-            else:
-                table_name = row['table_name']
+            table_name = row['table_name']
 
             if table_name not in schema:
                 schema[table_name] = {'name': table_name, 'columns': []}
@@ -157,19 +127,9 @@ class DremioODBC(BaseSQLQueryRunner):
         connection = None
 
         try:
-            server = self.configuration.get('server', '')
-            user = self.configuration.get('user', '')
-            password = self.configuration.get('password', '')
-            db = self.configuration['db']
-            port = self.configuration.get('port', 31010)
-            charset = self.configuration.get('charset', 'UTF-8')
-            driver = self.configuration.get('driver', '{Dremio ODBC Driver 64-bit}')
-
-            connection_string_fmt = 'DRIVER={};ConnectionType=Direct;HOST={};PORT={};AuthenticationType=Plain;UID={};PWD={};AdvancedProperties=CastAnyToVarchar=true;HandshakeTimeout=5;QueryTimeout=180;TimestampTZDisplayTimezone=utc;NumberOfPrefetchBuffers=5;Catalog=DREMIO;Schema={}'
-            connection_string = connection_string_fmt.format(driver,server,port,user,password,db)
-            
+            connection = self.configuration.get('connection', '')
             pyodbc.autocommit = True
-            connection = pyodbc.connect(connection_string, autocommit=True)
+            connection = pyodbc.connect(connection, autocommit=True)
             cursor = connection.cursor()
             logger.debug("DremioODBC running query: %s", query)
             cursor.execute(query)
