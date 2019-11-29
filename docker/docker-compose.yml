@@ -1,0 +1,14 @@
+version: "2"
+
+services:
+  redash:
+    restart: always
+    image: dezota/redash:latest
+    environment:
+      - BASE_URL=https://redash.datarx.cn
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - GMAIL_ADDR=
+      - GMAIL_PASSWD=
+    ports:
+      - "80:80"   # UI (HTTP)

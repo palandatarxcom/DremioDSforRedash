@@ -36,9 +36,9 @@ wget http://package.mapr.com/tools/MapR-ODBC/MapR_Drill/MapRDrill_odbc_v1.3.22.1
 alien -i --scripts maprdrill-1.3.22.1055-1.x86_64.rpm
 rm -f maprdrill-1.3.22.1055-1.x86_64.rpm
 pip install pyodbc pandas
-wget -O $REDASH_BASE_PATH/current/redash/query_runner/dremio_odbc.py "https://raw.githubusercontent.com/Dezota/DremioDSforRedash/master/dremio_odbc.py"
-wget -O $REDASH_BASE_PATH/current/client/dist/images/db-logos/dremio_odbc.png "https://raw.githubusercontent.com/Dezota/DremioDSforRedash/master/dremio_odbc.png"
-wget -O $REDASH_BASE_PATH/current/client/app/assets/images/db-logos/dremio_odbc.png "https://raw.githubusercontent.com/Dezota/DremioDSforRedash/master/dremio_odbc.png"
+wget -O $REDASH_BASE_PATH/current/redash/query_runner/dremio_odbc.py "https://raw.githubusercontent.com/palandatarxcom/DremioDSforRedash/master/dremio_odbc.py"
+wget -O $REDASH_BASE_PATH/current/client/dist/images/db-logos/dremio_odbc.png "https://raw.githubusercontent.com/palandatarxcom/DremioDSforRedash/master/dremio_odbc.png"
+wget -O $REDASH_BASE_PATH/current/client/app/assets/images/db-logos/dremio_odbc.png "https://raw.githubusercontent.com/palandatarxcom/DremioDSforRedash/master/dremio_odbc.png"
 # Make sure this is the only entry for REDASH_ADDITIONAL_QUERY_RUNNERS.  If you have others then update env manually
 echo "export REDASH_ADDITIONAL_QUERY_RUNNERS=redash.query_runner.python,redash.query_runner.dremio_odbc" >> $REDASH_BASE_PATH/.env
 supervisorctl restart all
